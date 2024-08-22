@@ -1,0 +1,27 @@
+services:
+  redis-pubsub:
+    image: redis:7.4.0
+    command: redis-server --save 20 1 --requirepass ${REDIS_PASSWORD} --port 6379
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+    - redis-pubsub-server-data:/data
+    restart: always
+
+  postgres-db:
+    image: postgres:15.8
+    restart: always 
+    shm_size: 128mb 
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - postgres-db-data:/var/lib/postgresql/data
+
+
+volumes:
+    redis-pubsub-server-data:
+    postgres-db-data:
